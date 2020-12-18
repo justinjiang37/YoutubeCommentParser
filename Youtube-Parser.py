@@ -34,10 +34,15 @@ import tkinter as tk
 import tkinter.font as font
 # UI import
 
-
-#inputLink = StringVar()
-
 def YoutubeParser (keywords, link):
+
+    # if keywords.get() == None or link == None:
+    #     root = tk.Tk()
+    #     root.title("error")
+    #     error_output = tk.Label(root, text = "Either keywords or link not filled out")
+    #     error_output.place(relx=0.5, rely=0.5, anchor='center')
+    #     tk.mainloop()
+
     options = Options()
     # options.add_argument("--headless")
 
@@ -82,7 +87,8 @@ def UI():
     keywordTextBox.place(relx=0.5, rely=0.3, anchor='center')
 
     keyboardLabel = tk.Label(root, text = "Keywords")
-    keyboardLabel.place(relx=0.5, rely=0.325, anchor='center')
+    keyboardLabel.config(font=("Courier bold", 13))
+    keyboardLabel.place(relx=0.325, rely=0.4165, anchor='center')
 
     keywords = tk.Entry(root)
     keywordTextBox.create_window(200, 225, window = keywords)
@@ -92,18 +98,23 @@ def UI():
     linkTextBox.place(relx=0.5, rely=0.85, anchor='center')
 
     linkLabel = tk.Label(root, text = "Link")
-    linkLabel.place(relx=0.5, rely=0.5, anchor='center')
+    linkLabel.config(font=("Courier bold", 13))
+    linkLabel.place(relx=0.35, rely=0.6, anchor='center')
 
     link = tk.Entry(root)
     linkTextBox.create_window(200, 0, window = link)
 
     #button
     button1 = tk.Button(text='Get all comments', command=lambda : YoutubeParser(keywords, link))
+    button1.config(font=("Courier bold", 13, 'bold', 'underline'))
+    button1.config(height = 2, width = 15)
+    button1.config(foreground = 'red')
     button1.place(relx=0.5, rely=0.75, anchor='s')
 
     #title
-    titleLabel = tk.Label(root, text="Welcome To The Youtube Comment Parser!\n Please enter keywords with a space in between each.\n Please paste your link in the box below keywords\n\n Press 'Get all comments' when you're ready!")
-    titleLabel.place(relx=0.5, rely=0.1, anchor='center')
+    titleLabel = tk.Label(root, text="Welcome To The Youtube Comment Parser!")
+    titleLabel.config(font=("Courier bold", 15))
+    titleLabel.place(relx=0.5, rely=0.25, anchor='center')
 
 
     root.mainloop()
