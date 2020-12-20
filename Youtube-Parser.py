@@ -64,13 +64,16 @@ def YoutubeParser (keywords, link):
 
         root = tk.Tk()
         root.title("ALL Comments")
+        space = tk.Label(root, text = "=====================================")
 
         for comment in wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#comment #content-text"))):
             if any(temp in comment.text for temp in keywords):
+                # not working
+                # image = driver.find_element_by_class_name("style-scope yt-img-shadow")
+                # image.pack()
                 text = tk.Label(root, text = comment.text)
                 text.pack()
-                # print(comment.text)
-                # print("")
+                space.pack()
 
         root.mainloop()
 
