@@ -48,6 +48,7 @@ def YoutubeParser (keywords, link):
 
     keywords = keywords.get()
     keywords = str(keywords).split(' ')
+    # Print out each keyword to check what's being checked here.
     with Chrome(options = options) as driver:
         wait = WebDriverWait(driver, 1)
         print("========================")
@@ -60,19 +61,17 @@ def YoutubeParser (keywords, link):
             wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body"))).send_keys(Keys.END)
             time.sleep(1)
 
-        # print(keywords)
-
         root = tk.Tk()
         root.title("ALL Comments")
-        space = tk.Label(root, text = "=====================================")
 
         for comment in wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#comment #content-text"))):
-            if any(temp in comment.text for temp in keywords):
-                # not working
+            # Try running without if and just add all.
+            if any(temp in comment.text.split(' ') for temp in keywords):
                 # image = driver.find_element_by_class_name("style-scope yt-img-shadow")
                 # image.pack()
                 text = tk.Label(root, text = comment.text)
                 text.pack()
+                space = tk.Label(root, text = "=====================================")
                 space.pack()
 
         root.mainloop()
@@ -115,7 +114,7 @@ def UI():
     button1.place(relx=0.5, rely=0.75, anchor='s')
 
     #title
-    titleLabel = tk.Label(root, text="Welcome To The Youtube Comment Parser!")
+    titleLabel = tk.Label(root, text="Welcome to the Youtube Comment Parser!")
     titleLabel.config(font=("Courier bold", 15))
     titleLabel.place(relx=0.5, rely=0.25, anchor='center')
 
