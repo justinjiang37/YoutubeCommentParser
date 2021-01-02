@@ -1,4 +1,4 @@
-# **Youtube Comment Parser**
+# **YouTube Comment Parser**
 ### **Welcome to the Youtube comment parser**
 
 The point of this project is to let content creators on Youtube to gather ideas and opinion from their personal fanbase from their video's comment section. Using the following steps, you will be able to get all the comments that contains the keyword of your choice!

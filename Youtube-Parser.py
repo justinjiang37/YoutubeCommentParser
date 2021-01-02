@@ -29,12 +29,14 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from tkinter import ttk
+from tkinter import Entry
 import tkinter as tk
 import tkinter.font as font
 # UI import
 
-def YoutubeParser (keywords, link):
+
+def YoutubeParser(keywords, link):
 
     # if keywords.get() == None or link == None:
     #     root = tk.Tk()
@@ -44,21 +46,19 @@ def YoutubeParser (keywords, link):
     #     tk.mainloop()
 
     options = Options()
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
 
     keywords = keywords.get()
     keywords = str(keywords).split(' ')
     # Print out each keyword to check what's being checked here.
-    with Chrome(options = options) as driver:
+    with Chrome(options=options) as driver:
         wait = WebDriverWait(driver, 1)
         print("========================")
-        # print(link.get())
-        # driver = webdriver.Chrome()
         driver.get(link.get())
-        # assert "Python" in driver.title
 
-        for item in range(5): #by increasing the highest range you can get more content
-            wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body"))).send_keys(Keys.END)
+        for item in range(5):  # by increasing the highest range you can get more content
+            wait.until(EC.visibility_of_element_located(
+                (By.TAG_NAME, "body"))).send_keys(Keys.END)
             time.sleep(1)
 
         root = tk.Tk()
@@ -67,11 +67,10 @@ def YoutubeParser (keywords, link):
         for comment in wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#comment #content-text"))):
             # Try running without if and just add all.
             if any(temp in comment.text.split(' ') for temp in keywords):
-                # image = driver.find_element_by_class_name("style-scope yt-img-shadow")
-                # image.pack()
-                text = tk.Label(root, text = comment.text)
+                text = tk.Label(root, text=comment.text)
                 text.pack()
-                space = tk.Label(root, text = "=====================================")
+                space = tk.Label(
+                    root, text="=====================================")
                 space.pack()
 
         root.mainloop()
@@ -80,46 +79,53 @@ def YoutubeParser (keywords, link):
 def UI():
     root = tk.Tk()
     root.title("Youtube Parser Tool")
-    init = tk.Canvas(root, width=600, height=600)
 
+    init = tk.Canvas(root, width=600, height=600,
+                     highlightthickness=5, highlightbackground="gray")
+    init.configure(bg='white')
     init.pack()
 
-    #keywords
-    keywordTextBox = tk.Canvas(root, width = 400, height = 300)
+    # keywords
+    keywordTextBox = tk.Canvas(root, width=400, height=300)
     keywordTextBox.place(relx=0.5, rely=0.3, anchor='center')
+    keywordTextBox.configure(bg="blue")
 
-    keyboardLabel = tk.Label(root, text = "Keywords")
+    keyboardLabel = tk.Label(root, text="Keywords")
     keyboardLabel.config(font=("Courier bold", 13))
     keyboardLabel.place(relx=0.325, rely=0.4165, anchor='center')
+    keyboardLabel.configure(bg="pink")
 
     keywords = tk.Entry(root)
-    keywordTextBox.create_window(200, 225, window = keywords)
+    keywordTextBox.create_window(200, 225, window=keywords)
 
-    #link
-    linkTextBox = tk.Canvas(root, width = 400, height = 300)
+    # link
+    linkTextBox = tk.Canvas(root, width=400, height=300)
     linkTextBox.place(relx=0.5, rely=0.85, anchor='center')
 
-    linkLabel = tk.Label(root, text = "Link")
+    linkLabel = tk.Label(root, text="Link")
     linkLabel.config(font=("Courier bold", 13))
     linkLabel.place(relx=0.35, rely=0.6, anchor='center')
 
     link = tk.Entry(root)
-    linkTextBox.create_window(200, 0, window = link)
+    linkTextBox.create_window(200, 0, window=link)
 
-    #button
-    button1 = tk.Button(text='Get all comments', command=lambda : YoutubeParser(keywords, link))
-    button1.config(font=("Courier bold", 13, 'bold', 'underline'))
-    button1.config(height = 2, width = 15)
-    button1.config(foreground = 'red')
+    # button
+    button1 = tk.Button(text='Get all comments',
+                        command=lambda: YoutubeParser(keywords, link))
+    button1.config(font=("Courier bold", 13))
+    button1.config(height=2, width=15)
+    button1.config(borderwidth=5)
     button1.place(relx=0.5, rely=0.75, anchor='s')
+    # blkac border
+    # style
 
-    #title
+    # title
     titleLabel = tk.Label(root, text="Welcome to the Youtube Comment Parser!")
     titleLabel.config(font=("Courier bold", 15))
     titleLabel.place(relx=0.5, rely=0.25, anchor='center')
 
-
     root.mainloop()
+
 
 if __name__ == "__main__":
     UI()
