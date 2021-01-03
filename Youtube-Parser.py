@@ -90,24 +90,26 @@ def UI():
     keywordTextBox = tk.Canvas(root, width=400, height=300)
     keywordTextBox.place(relx=0.5, rely=0.3, anchor='center')
     keywordTextBox.configure(bg="white")
+    keywordTextBox.config(borderwidth=0)
 
-    keyboardLabel = tk.Label(root, text="Keywords")
-    keyboardLabel.config(font=("Courier bold", 13))
-    keyboardLabel.place(relx=0.325, rely=0.4175, anchor='center')
-    keyboardLabel.configure(bg="white")
+    img = PhotoImage(file="C:/Users/Justi/Keyword.png")
+    keyboardLabel = tk.Label(root, image=img)
+    keyboardLabel.config(borderwidth=0)
+    keyboardLabel.place(relx=0.34, rely=0.4175, anchor='center')
 
     keywords = tk.Entry(root)
     keywordTextBox.create_window(200, 225, window=keywords)
 
     # link
-    linkTextBox = tk.Canvas(root, width=400, height=200)
+    linkTextBox = tk.Canvas(root, width=400, height=200, borderwidth=0)
     linkTextBox.place(relx=0.5, rely=0.75, anchor='center')
     linkTextBox.configure(bg="white")
+    linkTextBox.config(borderwidth=0)
 
-    linkLabel = tk.Label(root, text="Link")
-    linkLabel.config(font=("Courier bold", 13))
-    linkLabel.place(relx=0.35, rely=0.587, anchor='center')
-    linkLabel.configure(bg="white")
+    img1 = PhotoImage(file="C:/Users/Justi/link.png")
+    linkLabel = tk.Label(root, image=img1)
+    linkLabel.place(relx=0.36, rely=0.587, anchor='center')
+    linkLabel.config(borderwidth=0)
 
     link = tk.Entry(root)
     linkTextBox.create_window(200, 0, window=link)
@@ -115,16 +117,15 @@ def UI():
     # button
     button1 = tk.Button(text='Get all comments',
                         command=lambda: YoutubeParser(keywords, link))
-    img = PhotoImage(file="C:/Users/Justi/buttons.png")
-    button1.config(image=img)
+    imga = PhotoImage(file="C:/Users/Justi/button.png")
+    button1.config(image=imga)
     button1.config(borderwidth=0)
     button1.place(relx=0.5, rely=0.75, anchor='s')
 
     # title
-    titleLabel = tk.Label(root, text="Welcome to the Youtube Comment Parser!")
-    titleLabel.config(font=("Courier bold", 15))
+    titleImg = PhotoImage(file="C:/Users/Justi/title.png")
+    titleLabel = tk.Label(root, image=titleImg)
     titleLabel.place(relx=0.5, rely=0.25, anchor='center')
-    titleLabel.configure(bg="white")
     root.mainloop()
 
 
