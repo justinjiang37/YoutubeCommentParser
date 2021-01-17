@@ -1,7 +1,6 @@
 '''
 Every single import that's needed to run Selenium.
 These are default copied from online tutorials (randomly pieced together)
-
 We really only are using:
 time:                   Lets us control wait method which is a pause in the automation. You'll see it used to create pauses in the code.
 import Chrome:          Lets us use Chrome as the webdriver for web testing. I assume if we wanted firefox/safari/edge we'd import those instead.
@@ -13,8 +12,6 @@ import Keys:            Lets the program use keys such as ASDF, TAB, RETURN. In 
 import WebDriverWait:   In case of an issue, it will let the web automation driver wait for a certain amount of time before firing off code.
 import EC:              Lets us set the selectors. You can see on line 37 that it uses the CSS selector tags of #comment and #content-text. You can change that for whatever
                         you actually want to get.
-
-
 1. Improve the UI
 2. Add a new screen to go to to list out all of the relevant comments in a pretty way.
 3. Increase the range from 5 to a higher number.
@@ -51,7 +48,7 @@ def YoutubeParser(keywords, link):
 
     keywords = keywords.get()
     keywords = str(keywords).split(' ')
-    # Print out each keyword to check what's being checked here.
+
     with Chrome(options=options) as driver:
         wait = WebDriverWait(driver, 1)
         print("========================")
@@ -67,7 +64,16 @@ def YoutubeParser(keywords, link):
 
         for comment in wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#comment #content-text"))):
             # Try running without if and just add all.
-            if any(temp in comment.text.split(' ') for temp in keywords):
+            words = []
+            tmp = ""
+            punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+            for i in comment.text:
+                if i not in punctuations:
+                    tmp = tmp + i
+            words = tmp.split()
+            for j in range(len(words)):
+                words[j] = words[j].lower()
+            if any(temp in words for temp in keywords):
                 text = tk.Label(root, text=comment.text)
                 text.pack()
                 space = tk.Label(
@@ -81,8 +87,7 @@ def UI():
     root = tk.Tk()
     root.title("Youtube Parser Tool")
 
-    init = tk.Canvas(root, width=600, height=600,
-                     highlightthickness=5, highlightbackground="gray")
+    init = tk.Canvas(root, width=600, height=600,)
     init.configure(bg='white')
     init.pack()
 
@@ -104,11 +109,11 @@ def UI():
     linkTextBox = tk.Canvas(root, width=400, height=200, borderwidth=0)
     linkTextBox.place(relx=0.5, rely=0.75, anchor='center')
     linkTextBox.configure(bg="white")
-    linkTextBox.config(borderwidth=0)
+    linkTextBox.config(borderwidth=1)
 
     img1 = PhotoImage(file="C:/Users/Justi/link.png")
     linkLabel = tk.Label(root, image=img1)
-    linkLabel.place(relx=0.36, rely=0.587, anchor='center')
+    linkLabel.place(relx=0.36, rely=0.58, anchor='center')
     linkLabel.config(borderwidth=0)
 
     link = tk.Entry(root)
