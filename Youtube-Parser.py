@@ -32,17 +32,15 @@ from tkinter import Entry
 import tkinter as tk
 import tkinter.font as font
 from tkinter import *
+import io
+from PIL import Image
+import PIL
+import requests
+from PIL import Image, ImageTk
 # UI import
 
 
 def YoutubeParser(keywords, link):
-
-    # if keywords.get() == None or link == None:
-    #     root = tk.Tk()
-    #     root.title("error")
-    #     error_output = tk.Label(root, text = "Either keywords or link not filled out")
-    #     error_output.place(relx=0.5, rely=0.5, anchor='center')
-    #     tk.mainloop()
 
     options = Options()
     options.add_argument("--headless")
@@ -86,20 +84,18 @@ def YoutubeParser(keywords, link):
         # add second frame in canvas
         outputCanvas.create_window((0,0), window = outputFrame2, anchor = "nw")
 
-
-        # wider scope - holds the comment and the profile name and pfp
-        # find element by id - "contents"
-        # inside contents is all th comments - with tag = ytd-comment-thread-renderer
-        #   inside id = comment
-        #      inside pfp is img id = "img"
-        #      inside comment text
-
         for i in range(len(wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#comment #content-text"))))):
             comment = wait.until(EC.presence_of_all_elements_located(
                 (By.CSS_SELECTOR, "#comment #content-text")))[i]
 
             username = wait.until(EC.presence_of_all_elements_located(
                 (By.CSS_SELECTOR, "#comment #author-text")))[i].text
+
+            pfpLink = str(wait.until(EC.presence_of_all_elements_located(
+                (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
+
+            print(wait.until(EC.presence_of_all_elements_located(
+                (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
 
             words = []
             temp_sentence = ""
@@ -114,13 +110,11 @@ def YoutubeParser(keywords, link):
                 words[j] = words[j].lower()
 
             if any(temp in words for temp in keywords):
-                # user name is
-                # <span class="style-scope ytd-comment-renderer">
-                #           USERNAME
-                # </span>
-                # username = username_list[i].text
-
-                # need to read image from pfp list
+                response = requests.get(pfpLink)
+                image_bytes = io.BytesIO(response.content)
+                img = PIL.Image.open(image_bytes)
+                tkimage = ImageTk.PhotoImage(img)
+                pfp = tk.Label(root, image=tkimage)
 
                 temp_comment = comment.text
                 temp_comment_list = temp_comment.split(' ')
@@ -139,6 +133,7 @@ def YoutubeParser(keywords, link):
                             line = line + temp_comment_list[j] + ' '
                         new_string += line
 
+                pfp.pack(side = TOP)
                 username = tk.Label(outputFrame2, text=username + "\n___________________")
                 username.pack(side = TOP)
 
@@ -148,7 +143,7 @@ def YoutubeParser(keywords, link):
                     outputFrame2, text="\n\n  ")
                 space.pack(side = TOP)
 
-
+        driver.quit()
         root.mainloop()
 
 
@@ -161,28 +156,30 @@ def UI():
     init.pack()
 
     # keywords
-    keywordTextBox = tk.Canvas(root, width=300, height=80)
-    keywordTextBox.place(relx=0.5, rely=0.45, anchor='center')
-    keywordTextBox.configure(bg="red")
+    keywordTextBox = tk.Canvas(root, width=300, height=80,
+                               bd=0, highlightthickness=0)
+    keywordTextBox.place(relx=0.5, rely=0.60, anchor='center')
+    keywordTextBox.configure(bg="white")
     keywordTextBox.config(borderwidth=0)
 
     img = PhotoImage(file="C:/Users/Justi/Keyword.png")
     keyboardLabel = tk.Label(root, image=img)
     keyboardLabel.config(borderwidth=0)
-    keyboardLabel.place(relx=0.365, rely=0.449, anchor='center')
+    keyboardLabel.place(relx=0.36, rely=0.595, anchor='center')
 
     keywords = tk.Entry(root)
     keywordTextBox.create_window(170, 40, window=keywords)
 
     # link
-    linkTextBox = tk.Canvas(root, width=300, height=80, borderwidth=0)
-    linkTextBox.place(relx=0.5, rely=0.60, anchor='center')
-    linkTextBox.configure(bg="blue")
+    linkTextBox = tk.Canvas(root, width=300, height=80,
+                            bd=0, highlightthickness=0)
+    linkTextBox.place(relx=0.5, rely=0.45, anchor='center')
+    linkTextBox.configure(bg="white")
     linkTextBox.config(borderwidth=1)
 
     img1 = PhotoImage(file="C:/Users/Justi/link.png")
     linkLabel = tk.Label(root, image=img1)
-    linkLabel.place(relx=0.38, rely=0.595, anchor='center')
+    linkLabel.place(relx=0.365, rely=0.449, anchor='center')
     linkLabel.config(borderwidth=0)
 
     link = tk.Entry(root)
@@ -198,6 +195,7 @@ def UI():
 
     # title
     titleLabel = tk.Label(root, text = "Welcome to the YouTube Comment Parser")
+    titleLabel.configure(background = "white")
     titleLabel.config(font=("Helvetica", 15))
     titleLabel.place(relx=0.5, rely=0.3, anchor='center')
     root.mainloop()
@@ -207,12 +205,6 @@ if __name__ == "__main__":
     UI()
 
 # TODO:
-#       add profile name to output
-#       get name from
-#       for name in wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#name #name-text"))):
-#       ^^
-#       smth like that
-#       wait.until(EC.presence_of_all_elements_located... returns list.
-
+#   add image - test code copy
 
 # use https://www.youtube.com/watch?v=FSGeskFzE0s as example - jack and rose
