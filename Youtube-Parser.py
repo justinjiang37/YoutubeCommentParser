@@ -91,11 +91,11 @@ def YoutubeParser(keywords, link):
             username = wait.until(EC.presence_of_all_elements_located(
                 (By.CSS_SELECTOR, "#comment #author-text")))[i].text
 
-            pfpLink = str(wait.until(EC.presence_of_all_elements_located(
-                (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
+            # pfpLink = str(wait.until(EC.presence_of_all_elements_located(
+            #     (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
 
-            print(wait.until(EC.presence_of_all_elements_located(
-                (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
+            # print(wait.until(EC.presence_of_all_elements_located(
+            #     (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
 
             words = []
             temp_sentence = ""
@@ -109,13 +109,19 @@ def YoutubeParser(keywords, link):
             for j in range(len(words)):
                 words[j] = words[j].lower()
 
-            if any(temp in words for temp in keywords):
-                response = requests.get(pfpLink)
-                image_bytes = io.BytesIO(response.content)
-                img = PIL.Image.open(image_bytes)
-                tkimage = ImageTk.PhotoImage(img)
-                pfp = tk.Label(root, image=tkimage)
+# response = requests.get(pfpLink)
+# image_bytes = io.BytesIO(response.content)
 
+# img = PIL.Image.open(image_bytes)
+# tkimage = ImageTk.PhotoImage(img)
+
+# pfp = tk.Label(root, image=tkimage)
+# pfp.image = tkimage
+# print(type(tkimage))
+
+# pfp.pack(side = TOP)
+
+            if any(temp in words for temp in keywords):
                 temp_comment = comment.text
                 temp_comment_list = temp_comment.split(' ')
                 new_string = ""
@@ -133,19 +139,17 @@ def YoutubeParser(keywords, link):
                             line = line + temp_comment_list[j] + ' '
                         new_string += line
 
-                pfp.pack(side = TOP)
-                username = tk.Label(outputFrame2, text=username + "\n___________________")
-                username.pack(side = TOP)
+                username = tk.Label(
+                    outputFrame2, text=username + "\n___________________")
+                username.pack(side=TOP)
 
                 text = tk.Label(outputFrame2, text=new_string)
                 text.pack()
                 space = tk.Label(
                     outputFrame2, text="\n\n  ")
-                space.pack(side = TOP)
+                space.pack(side=TOP)
 
-        driver.quit()
         root.mainloop()
-
 
 def UI():
     root = tk.Tk()

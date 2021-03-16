@@ -54,17 +54,17 @@ for element in pfp_list:
     # look at output
     # some times the first image works and sometimes it dosent :(
     # GET Attribute is CORRECT but it is just NOT consistent
-    #request .get specifically NEEDS an Url Required. The url of the request
-    response = requests.get(a)  # What is requests.get EXPECTING EXACTLY
+    # request .get specifically NEEDS an Url Required. The url of the request
+    response = requests.get(a)
     image_bytes = io.BytesIO(response.content)
     img = PIL.Image.open(image_bytes)
     tkimage = ImageTk.PhotoImage(img)
-
+    print(type(tkimage))
     testimg = tk.Label(root, image=tkimage)
-    w = tk.Label(root, text="Hello Tkinter!")
-
-    w.pack()
     testimg.pack()
+    print(type(testimg))
+    # w = tk.Label(root, text="Hello Tkinter!")
+    # w.pack()
     # only pack very last image (with link url)
 
 root.mainloop()
