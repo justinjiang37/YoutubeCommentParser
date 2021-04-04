@@ -53,7 +53,7 @@ def YoutubeParser(keywords, link):
         print("========================")
         driver.get(link.get())
 
-        for item in range(10):  # by increasing the highest range you can get more content
+        for item in range(5):  # by increasing the highest range you can get more content
             wait.until(EC.visibility_of_element_located(
                 (By.TAG_NAME, "body"))).send_keys(Keys.END) # end moves page down
             time.sleep(1)
@@ -91,8 +91,8 @@ def YoutubeParser(keywords, link):
             username = wait.until(EC.presence_of_all_elements_located(
                 (By.CSS_SELECTOR, "#comment #author-text")))[i].text
 
-            # pfpLink = str(wait.until(EC.presence_of_all_elements_located(
-            #     (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
+            pfpLink = str(wait.until(EC.presence_of_all_elements_located(
+                (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
 
             # print(wait.until(EC.presence_of_all_elements_located(
             #     (By.CSS_SELECTOR, "#comment #img")))[i].get_attribute("src"))
@@ -109,23 +109,31 @@ def YoutubeParser(keywords, link):
             for j in range(len(words)):
                 words[j] = words[j].lower()
 
-# response = requests.get(pfpLink)
-# image_bytes = io.BytesIO(response.content)
-
-# img = PIL.Image.open(image_bytes)
-# tkimage = ImageTk.PhotoImage(img)
-
-# pfp = tk.Label(root, image=tkimage)
-# pfp.image = tkimage
-# print(type(tkimage))
-
-# pfp.pack(side = TOP)
-
             if any(temp in words for temp in keywords):
+
                 temp_comment = comment.text
                 temp_comment_list = temp_comment.split(' ')
                 new_string = ""
                 line = ""
+
+                if pfpLink != None:
+                    response = requests.get(pfpLink)
+                    image_bytes = io.BytesIO(response.content)
+
+                    img = PIL.Image.open(image_bytes)
+                    # img = path
+                    tkimage = ImageTk.PhotoImage(img)
+                    # problem right here
+                    pfp = tk.Label(root, image = tkimage)
+                    # tried to keep reference following
+                    # https://stackoverflow.com/questions/59607643/image-pyimage4-doesnt-exist
+                    pfp.image = tkimage
+                    print(type(pfp))
+
+                else:
+                    # later replace with replacement image
+                    pfp = tk.Label(root, text = "Profile pic not found")
+                    pfp.pack()
 
                 for i in range(0, len(temp_comment_list), 7):
                     if i + 7 < len(temp_comment_list):
