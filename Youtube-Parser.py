@@ -16,6 +16,7 @@ import EC:              Lets us set the selectors. You can see on line 37 that i
 2. Add a new screen to go to to list out all of the relevant comments in a pretty way.
 3. Increase the range from 5 to a higher number.
 4. Disable the Chrome Tester rom loading the UI so that the tests run faster
+.
 '''
 
 import time
